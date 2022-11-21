@@ -3,9 +3,14 @@
 #Advanced Algorithms
 
 import numpy as np
+import numpy
  #import numpy for matrix operations
 
+
+ 
 class kruskalClass:
+    def __init__(self):
+        print("kruskalClass object created")    
 
     #s = find(u,v)
     #Input: 'u' is a union-find structure.  'v' is a numerical index of a graph node.
@@ -39,15 +44,17 @@ class kruskalClass:
     #to a node in the same dictionary.  The numpy arrays can be more than one 1-D if you want, but they must be numpy
     #arrays, and the 0th entry must contain pointers to other nodes that are used
     #in the 'find' and 'union' functions.
-    def makeUnionFind(self,N):
+    def makeUnionFind(self,N):  
+        #u is a 1xN pytohn dictionary
         u = {}
         for i in range(N):
-            u[i] = [i,0]
+            u[i] = np.array([i,1])
         return u
+       
 
     #b = mergesort(a)
     #Input: 'a' is a 1xK numpy array.
-    #Output: 'b' is a 1xK numpy array with elements in ascending order. (ie. b[0] <= b[1] <= ... <= b[K-1], lowest value to highest value)
+    #Output: 'b' is a 1xK numpy array with elements in ascending order. (ie. b[0] <= b[1] <= ... <= b[K-1] ==> lowest value to highest value)
     def mergesort(self,a):
         if len(a) > 1:
             mid = len(a)//2
