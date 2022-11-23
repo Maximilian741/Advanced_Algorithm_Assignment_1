@@ -24,25 +24,25 @@ class kruskalClass:
 
     #u_out = union(u_in,s1,s2)
     #Input: 'u_in' is a union-find data structure. 's1' and 's2' are numerical values
-    #coresponding to the labels of two groups of graph nodes.
+    #corresponding to the labels of two groups of graph nodes.
     #Output: 'u_out' is a union-find data structure that is the result of merging the two sets of nodes.
     def union(self,u_in,s1,s2):
         #checks to see if the two sets are already in the same connected component.
         if self.find(u_in,s1) == self.find(u_in,s2):
             return u_in
-        #if the two sets are not in the same connected component, then the smaller set is added to the larger set.
-        if u_in[s1][1] > u_in[s2][1]:
-            u_in[s2][0] = s1
-            return u_in
-        elif u_in[s1][1] < u_in[s2][1]:
-            u_in[s1][0] = s2
-            return u_in
-            #if the two sets are the same size, then the second set is added to the first set, and the size of the first set is incremented by 1.
+        #if the two sets are not in the same connected component, then merge the two sets.
         else:
-            u_in[s1][0] = s2
-            u_in[s1][1] += 1
-            return u_in
-    
+            #if the size of the first set is greater than the size of the second set, then merge the second set into the first set.
+            if u_in[s1][1] > u_in[s2][1]:
+                u_in[s2][0] = s1
+                u_in[s1][1] += u_in[s2][1]
+                return u_in
+            #if the size of the second set is greater than the size of the first set, then merge the first set into the second set.
+            else:
+                u_in[s1][0] = s2
+                u_in[s2][1] += u_in[s1][1]
+                return u_in
+
     #u = makeUnionFind(N)
     #Input: 'N' is the number of nodes in a graph.
     #Output: 'u' is a 1xN python dictionary, where the keys are numerical labels
@@ -53,7 +53,7 @@ class kruskalClass:
     def makeUnionFind(self,N):  
         #u is a 1xN pytohn dictionary
         u = {}
-        #for loop to creat an 1xN numpy array for each node in the graph.
+        #for loop to create an 1xN numpy array for each node in the graph.
         for i in range(N):
             u[i] = np.array([i,1])
         return u
@@ -75,6 +75,7 @@ class kruskalClass:
             i = 0
             j = 0
             k = 0
+            #while loop to sort the array.
             while i < len(left) and j < len(right):
                 if left[i][2] < right[j][2]:
                     a[k] = left[i]
@@ -103,7 +104,9 @@ class kruskalClass:
     #We will only consider undirected graphs, and therefore 'T' should be an upper right triangular matrix.
 
     def findMinimumSpanningTree(self,A):
-        #create a union-find data structure for the graph.
+        #N is the number of nodes in the graph.
+        #u is the union-find data structure.
+        #T is the minimum spanning tree.
         N = A.shape[0]
         u = self.makeUnionFind(N)
         #create a list initialized to all zeros.
@@ -120,7 +123,6 @@ class kruskalClass:
             if s1 != s2:
                 u = self.union(u,s1,s2)
                 T[edges[i][0]][edges[i][1]] = edges[i][2]
-                T[edges[i][1]][edges[i][0]] = edges[i][2]
         return T
 
 # Path: Project_1_Advanced_Algorithms\main.py
