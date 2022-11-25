@@ -34,11 +34,14 @@ class kruskalClass:
         else:
             #if the size of the first set is greater than the size of the second set, then merge the second set into the first set.
             if u_in[s1][1] > u_in[s2][1]:
+                #u_in[s2][0] = u_in[s1][0]
                 u_in[s2][0] = s1
+                #This is adding the total weight from the previous connected component to the new connected component.
                 u_in[s1][1] += u_in[s2][1]
                 return u_in
             #if the size of the second set is greater than the size of the first set, then merge the first set into the second set.
             else:
+                #u_in[s1][0] = u_in[s2][0]
                 u_in[s1][0] = s2
                 u_in[s2][1] += u_in[s1][1]
                 return u_in
@@ -55,6 +58,7 @@ class kruskalClass:
         u = {}
         #for loop to create an 1xN numpy array for each node in the graph.
         for i in range(N):
+            #u[i] is a 1xN numpy array
             u[i] = np.array([i,1])
         return u
        
@@ -63,6 +67,7 @@ class kruskalClass:
     #Input: 'a' is a 1xK numpy array.
     #Output: 'b' is a 1xK numpy array with elements in ascending order. (ie. b[0] <= b[1] <= ... <= b[K-1] ==> lowest value to highest value)
     def mergesort(self,a):
+        #Decided to just return 'a' as if it were equivalent to 'b' because the list of edges is already sorted. As seen below
         if len(a) > 1:
             #split the array into two halves
             mid = len(a)//2
@@ -77,21 +82,27 @@ class kruskalClass:
             k = 0
             #while loop to sort the array.
             while i < len(left) and j < len(right):
+                #if the weight of the LEFT edge is less than the weight of the right edge, then add the left edge to the sorted array.
                 if left[i][2] < right[j][2]:
                     a[k] = left[i]
                     i += 1
+                #if the weight of the RIGHT edge is less than the weight of the left edge, then add the right edge to the sorted array.
                 else:
                     a[k] = right[j]
                     j += 1
                 k += 1
+            #Houskeeping to check if any elements weer left over
+            #if there are elements left over in the LEFT array, then add them to the sorted array.
             while i < len(left):
                 a[k] = left[i]
                 i += 1
                 k += 1
+                #if there are elements left over in the RIGHT array, then add them to the sorted array.
             while j < len(right):
                 a[k] = right[j]
                 j += 1
                 k += 1
+        #return the sorted array. a == b per the instructions.
         return a
 
     #T = findMinimumSpanningTree(A)
@@ -112,20 +123,23 @@ class kruskalClass:
         #create a list initialized to all zeros.
         T = numpy.zeros((N,N))
         edges = []
+        #iterate through the adjacency matrix to find all the edges in the graph.
         for i in range(N):
             for j in range(i+1,N):
+                #if the weight of the edge is greater than zero, then add the edge to the list of edges.
                 if A[i][j] != 0:
                     edges.append([i,j,A[i][j]])
+        #sort the list of edges.
         edges = self.mergesort(edges)
+        #iterate through the list of edges.
         for i in range(len(edges)):
+            #if the two nodes that the edge connects are not in the same connected component, then add the edge to the minimum spanning tree.
             s1 = self.find(u,edges[i][0])
             s2 = self.find(u,edges[i][1])
+            #if the two nodes that the edge connects are not in the same connected component, then add the edge to the minimum spanning tree.
             if s1 != s2:
+                #add the edge to the minimum spanning tree.
                 u = self.union(u,s1,s2)
                 T[edges[i][0]][edges[i][1]] = edges[i][2]
         return T
 
-# Path: Project_1_Advanced_Algorithms\main.py
-
-
-    
